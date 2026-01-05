@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <title>QuickWash</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #006af8;
+        font-family: "Noto Sans JP", sans-serif;
+        overflow: hidden;
+      }
+
+      header {
+        text-align: center;
+        padding: 20px;
+      }
+
+      header img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      #typing-welcome,
+      #typing-additional {
+        color: white;
+      }
+
+      main {
+        text-align: center;
+        margin: 20px auto;
+      }
+
+      /* Cursor */
+      .neon-tail,
+      .neon-explosion {
+        position: fixed;
+      }
+
+      .neon-tail {
+        width: 4px;
+        height: 4px;
+        background-color: yellow;
+        border-radius: 50%;
+        transform-origin: center;
+        transform: scale(0);
+        transition: transform 0.3s ease-out;
+      }
+
+      .neon-explosion {
+        width: 10px;
+        height: 10px;
+        background-color: yellow;
+        border-radius: 50%;
+        transform-origin: center;
+        animation: explode 0.5s ease-out;
+        pointer-events: none;
+      }
+
+      @keyframes explode {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      button {
+        background-color: white;
+        color: black;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: black;
+        color: white;
+      }
+
+      /* Media Query untuk Responsivitas */
+      @media only screen and (max-width: 600px) {
+        header img {
+          max-width: 40%;
+        }
+
+        h1 {
+          font-size: 18px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="neon-tail"></div>
+    <header align="center">
+      <img src="asset/quickwash.png" alt="quickwash" />
+      <h1 id="typing-welcome"></h1>
+      <p id="typing-additional"></p>
+    </header>
+    <main>
+      <button type="button"><a href="wash.html">Choose Service</a></button>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var welcomeText = "Welcome to QuickWash";
+        var additionalText =
+          "Choose the laundry service that you are interested in today.";
+        var speed = 50; // kecepatan ketik (ms)
+        var typingWelcome = document.getElementById("typing-welcome");
+        var typingAdditional = document.getElementById("typing-additional");
+        var buttonElement = document.getElementById("button");
+
+        function typeWriter(element, text, callback) {
+          var i = 0;
+
+          function type() {
+            if (i < text.length) {
+              element.innerHTML += text.charAt(i);
+              i++;
+              setTimeout(type, speed);
+            } else {
+              callback(); // Panggil callback setelah selesai mengetik
+            }
+          }
+
+          type();
+        }
+
+        function animateButton() {
+          buttonElementElement.style.opacity = "1";
+
+          // Tambahkan kelas animasi baru
+          buttonElement.classList.add(
+            "animate__animated",
+            "animate__fadeInUpBig"
+          );
+        }
+
+        // Mulai animasi teks welcome
+        typeWriter(typingWelcome, welcomeText, function () {
+          // Setelah selesai animasi teks welcome, mulai animasi teks additional
+          typeWriter(typingAdditional, additionalText, animateButton);
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const tail = document.querySelector(".neon-tail");
+
+        document.addEventListener("mousemove", function (e) {
+          const { clientX, clientY } = e;
+
+          // Create explosion element
+          const explosion = document.createElement("div");
+          explosion.classList.add("neon-explosion");
+          explosion.style.left = `${clientX}px`;
+          explosion.style.top = `${clientY}px`;
+
+          // Append explosion to the body
+          document.body.appendChild(explosion);
+
+          // Remove explosion element after animation
+          explosion.addEventListener("animationend", function () {
+            explosion.remove();
+          });
+
+          // Update position of the tail
+          tail.style.left = `${clientX}px`;
+          tail.style.top = `${clientY}px`;
+        });
+
+        document.addEventListener("mouseenter", function () {
+          tail.classList.add("active");
+        });
+
+        document.addEventListener("mouseleave", function () {
+          tail.classList.remove("active");
+        });
+      });
+
+      <!-- Feather Icons -->
+      feather.replace();
+    </script>
+  </body>
+</html>

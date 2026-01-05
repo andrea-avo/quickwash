@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Noto Sans JP", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      header {
+        background-color: #006af8;
+        color: #fff;
+        text-align: center;
+        padding: 1em 0;
+      }
+
+      /* Cursor */
+      .neon-tail,
+      .neon-explosion {
+        position: fixed;
+      }
+
+      .neon-tail {
+        width: 4px;
+        height: 4px;
+        background-color: black;
+        border-radius: 50%;
+        transform-origin: center;
+        transform: scale(0);
+        transition: transform 0.3s ease-out;
+      }
+
+      .neon-explosion {
+        width: 10px;
+        height: 10px;
+        background-color: black;
+        border-radius: 50%;
+        transform-origin: center;
+        animation: explode 0.5s ease-out;
+        pointer-events: none;
+      }
+
+      @keyframes explode {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      form {
+        max-width: 80%;
+        margin: 2em auto;
+        padding: 1em;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      label {
+        display: block;
+        margin: 1em 0 0.5em;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.5em;
+        margin-bottom: 1em;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #006af8;
+        color: #fff;
+        padding: 0.5em 1em;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5em;
+      }
+
+      button a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .card {
+        max-width: 80%;
+        margin: 2em auto;
+        padding: 1em;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+    </style>
+    <title>Payment</title>
+  </head>
+  <body>
+    <header>
+      <h1>Payment</h1>
+    </header>
+    <div class="neon-tail"></div>
+    <form id="transaksiForm">
+      <label for="namaPelanggan">Customer's Name:</label>
+      <input type="text" id="namaPelanggan" name="namaPelanggan" required />
+
+      <label for="berat">Weight (kg):</label>
+      <input type="number" id="berat" name="berat" required />
+
+      <label for="service">Service:</label>
+      <select id="service" name="service" required>
+        <option value="Wash" data-price="7000">Wash | Rp. 7000/kg</option>
+        <option value="Iron" data-price="5000">Iron | Rp. 5000/kg</option>
+        <option value="Dry Clean" data-price="20000">
+          Dry Clean | Rp. 20000/kg
+        </option>
+        <option value="Wash & Iron" data-price="12000">
+          Wash & Iron | Rp. 12000/kg
+        </option>
+      </select>
+
+      <label for="noTelepon">Phone Number:</label>
+      <input type="tel" id="noTelepon" name="noTelepon" required />
+
+      <label for="alamat">Address:</label>
+      <input type="text" id="alamat" name="alamat" required />
+
+      <label for="metodePembayaran">Payment Method:</label>
+      <select id="metodePembayaran" name="metodePembayaran" required>
+        <option value="BCA">BCA</option>
+        <option value="BNI">BNI</option>
+        <option value="BRI">BRI</option>
+        <option value="BSI">BSI</option>
+        <option value="BTN">BTN</option>
+        <option value="Cash">Cash</option>
+        <option value="CIMB Niaga">CIMB Niaga</option>
+        <option value="DANA">DANA</option>
+        <option value="Danamon">Danamon</option>
+        <option value="GoPay">GoPay</option>
+        <option value="Mandiri">Mandiri</option>
+        <option value="ShopeePay">ShopeePay</option>
+      </select>
+
+      <button type="button"><a href="index.html">Back</a></button>
+      <button type="button" onclick="tambahTransaksi()">Pay Transaction</button>
+      <button type="button" onclick="konfirmasiBatal()">
+        Cancel Transaction
+      </button>
+    </form>
+
+    <!-- Display the input results as a card -->
+    <div class="card" id="resultCard" style="display: none">
+      <h2 align="center">Transaction Details</h2>
+      <br />
+      <p>
+        <strong>Customer's Name:</strong> <span id="resultNamaPelanggan"></span>
+      </p>
+      <p><strong>Phone Number:</strong> <span id="resultNoTelepon"></span></p>
+      <p><strong>Address:</strong> <span id="resultAlamat"></span></p>
+      <p><strong>Service:</strong> <span id="resultService"></span></p>
+      <p><strong>Weight (kg):</strong> <span id="resultBerat"></span></p>
+      <p>
+        <strong>Payment Method:</strong>
+        <span id="resultMetodePembayaran"></span>
+      </p>
+      <p><strong>Pickup Date:</strong> <span id="resultPickupDate"></span></p>
+      <br />
+      <h2 align="center">Total Cost: <span id="resultTotalCost"></span></h2>
+    </div>
+
+    <script>
+      function tambahTransaksi() {
+        // Your existing logic to retrieve form data and perform any actions
+
+        // Get selected service and its price
+        const selectedServiceElement = document.getElementById("service");
+        const selectedServiceIndex = selectedServiceElement.selectedIndex;
+        const selectedService =
+          selectedServiceElement.options[selectedServiceIndex].value;
+        const selectedServicePrice = parseInt(
+          selectedServiceElement.options[selectedServiceIndex].getAttribute(
+            "data-price"
+          )
+        );
+
+        // Calculate total cost
+        const weight = parseFloat(document.getElementById("berat").value);
+        const totalCost = selectedServicePrice * weight;
+
+        // Calculate pickup date (2 days from today)
+        const today = new Date();
+        const pickupDate = new Date(today);
+        pickupDate.setDate(today.getDate() + 2);
+
+        // Display the result card
+        document.getElementById("resultCard").style.display = "block";
+
+        // Populate the result card with the entered information
+        document.getElementById("resultNamaPelanggan").textContent =
+          document.getElementById("namaPelanggan").value;
+        document.getElementById("resultBerat").textContent =
+          document.getElementById("berat").value + " kg";
+        document.getElementById("resultService").textContent = selectedService;
+        document.getElementById("resultTotalCost").textContent =
+          "Rp. " + totalCost.toLocaleString("id-ID");
+        document.getElementById("resultNoTelepon").textContent =
+          document.getElementById("noTelepon").value;
+        document.getElementById("resultAlamat").textContent =
+          document.getElementById("alamat").value;
+        document.getElementById("resultMetodePembayaran").textContent =
+          document.getElementById("metodePembayaran").value;
+        document.getElementById("resultPickupDate").textContent =
+          pickupDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+        // Save data to local storage
+        const transactionData = {
+          namaPelanggan: document.getElementById("namaPelanggan").value,
+          berat: document.getElementById("berat").value,
+          service: selectedService,
+          totalCost: totalCost.toLocaleString("id-ID"),
+          noTelepon: document.getElementById("noTelepon").value,
+          alamat: document.getElementById("alamat").value,
+          metodePembayaran: document.getElementById("metodePembayaran").value,
+          pickupDate: pickupDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+        };
+        localStorage.setItem(
+          "transactionData",
+          JSON.stringify(transactionData)
+        );
+
+        // Show a notification
+        alert("Payment Successful!");
+      }
+
+      function konfirmasiBatal() {
+        // Ask for cancellation reason
+        const reason = prompt(
+          "Are You Sure You Want To Cancel The Transaction? Please Enter The Reason For Cancellation:"
+        );
+
+        // If the user provides a reason, proceed with cancellation
+        if (reason) {
+          // Clear local storage
+          localStorage.removeItem("transactionData");
+
+          // Hide the result card
+          document.getElementById("resultCard").style.display = "none";
+
+          // Clear form fields
+          document.getElementById("transaksiForm").reset();
+
+          // Show a cancellation message with the reason
+          alert("Transaction Canceled. Reason: " + reason);
+        }
+      }
+
+      // Cursor //
+      document.addEventListener("DOMContentLoaded", function () {
+        const tail = document.querySelector(".neon-tail");
+
+        document.addEventListener("mousemove", function (e) {
+          const { clientX, clientY } = e;
+
+          // Create explosion element
+          const explosion = document.createElement("div");
+          explosion.classList.add("neon-explosion");
+          explosion.style.left = `${clientX}px`;
+          explosion.style.top = `${clientY}px`;
+
+          // Append explosion to the body
+          document.body.appendChild(explosion);
+
+          // Remove explosion element after animation
+          explosion.addEventListener("animationend", function () {
+            explosion.remove();
+          });
+
+          // Update position of the tail
+          tail.style.left = `${clientX}px`;
+          tail.style.top = `${clientY}px`;
+        });
+
+        document.addEventListener("mouseenter", function () {
+          tail.classList.add("active");
+        });
+
+        document.addEventListener("mouseleave", function () {
+          tail.classList.remove("active");
+        });
+      });
+    </script>
+  </body>
+</html>
