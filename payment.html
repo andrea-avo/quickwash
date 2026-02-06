@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/payment.css" />
+    <title>Payment</title>
+  </head>
+  <body>
+    <header>
+      <h1>Payment</h1>
+    </header>
+
+    <div class="neon-tail"></div>
+
+    <form id="transaksiForm">
+      <label for="namaPelanggan">Customer's Name:</label>
+      <input type="text" id="namaPelanggan" name="namaPelanggan" required />
+
+      <label for="berat">Weight (kg):</label>
+      <input type="number" id="berat" name="berat" required />
+
+      <label for="service">Service:</label>
+      <select id="service" name="service" required>
+        <option value="Wash" data-price="7000">Wash | Rp. 7000/kg</option>
+        <option value="Iron" data-price="5000">Iron | Rp. 5000/kg</option>
+        <option value="Dry Clean" data-price="20000">
+          Dry Clean | Rp. 20000/kg
+        </option>
+        <option value="Wash & Iron" data-price="12000">
+          Wash & Iron | Rp. 12000/kg
+        </option>
+      </select>
+
+      <label for="noTelepon">Phone Number:</label>
+      <input type="tel" id="noTelepon" name="noTelepon" required />
+
+      <label for="alamat">Address:</label>
+      <input type="text" id="alamat" name="alamat" required />
+
+      <label for="metodePembayaran">Payment Method:</label>
+      <select id="metodePembayaran" name="metodePembayaran" required>
+        <option value="BCA">BCA</option>
+        <option value="BNI">BNI</option>
+        <option value="BRI">BRI</option>
+        <option value="BSI">BSI</option>
+        <option value="BTN">BTN</option>
+        <option value="Cash">Cash</option>
+        <option value="CIMB Niaga">CIMB Niaga</option>
+        <option value="DANA">DANA</option>
+        <option value="Danamon">Danamon</option>
+        <option value="GoPay">GoPay</option>
+        <option value="Mandiri">Mandiri</option>
+        <option value="ShopeePay">ShopeePay</option>
+      </select>
+
+      <button type="button"><a href="index.html">Back</a></button>
+      <button type="button" onclick="tambahTransaksi()">Pay Transaction</button>
+      <button type="button" onclick="konfirmasiBatal()">
+        Cancel Transaction
+      </button>
+    </form>
+
+    <div class="card" id="resultCard" style="display: none">
+      <h2>Transaction Details</h2>
+      <br />
+      <p>
+        <strong>Customer's Name:</strong> <span id="resultNamaPelanggan"></span>
+      </p>
+      <p><strong>Phone Number:</strong> <span id="resultNoTelepon"></span></p>
+      <p><strong>Address:</strong> <span id="resultAlamat"></span></p>
+      <p><strong>Service:</strong> <span id="resultService"></span></p>
+      <p><strong>Weight (kg):</strong> <span id="resultBerat"></span></p>
+      <p>
+        <strong>Payment Method:</strong>
+        <span id="resultMetodePembayaran"></span>
+      </p>
+      <p><strong>Pickup Date:</strong> <span id="resultPickupDate"></span></p>
+      <br />
+      <h2>Total Cost: <span id="resultTotalCost"></span></h2>
+    </div>
+    <script src="js/payment.js"></script>
+  </body>
+</html>
